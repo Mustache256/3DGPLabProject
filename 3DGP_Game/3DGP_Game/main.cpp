@@ -1,6 +1,8 @@
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 #include <iostream>
 #include <stdexcept>
@@ -162,7 +164,7 @@ int main()
 
 	// Ensure the VAO "position" attribute stream gets set as the first position
 	// during the link.
-	glBindAttribLocation(programId, 0, "in_Position");
+	glBindAttribLocation(programId, 0, "a_Position");
 	glBindAttribLocation(programId, 1, "a_Color");
 
 
@@ -184,6 +186,10 @@ int main()
 	glDetachShader(programId, fragmentShaderId);
 	glDeleteShader(fragmentShaderId);
 
+	GLint modelLoc = glGetUniformLocation(programId, "u_Model");
+	GLint projectionLoc = glGetUniformLocation(programId, "u_Projection");
+
+	float angle = 0;
 	bool quit = false;
 
 	while (!quit)
@@ -199,11 +205,32 @@ int main()
 		}
 
 		//Clear red
-		glClearColor(1, 0, 0, 1);
+		glClearColor(0, 0.5f, 0.5f, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// Instruct OpenGL to use our shader program and our VAO
+		// Prepare the perspective projection matrix
+		glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)600 / (float)600, 0.1f, 100.f);
+
+		// Prepare the model matrix
+		glm::mat4 model(1.0f);
+		model = glm::translate(model, glm::vec3(0, 0, -2.5f));
+		model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
+
+		// Increase the float angle so next frame the triangle rotates further
+		angle += 1.0f;
+
+		// Make sure the current program is bound
+
 		glUseProgram(programId);
+
+		// Upload the model matrix
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		// Upload the projection matrix
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+		// Instruct OpenGL to use our shader program and our VAO
+		
 		glBindVertexArray(vaoId);
 
 		// Draw 3 vertices (a triangle)
