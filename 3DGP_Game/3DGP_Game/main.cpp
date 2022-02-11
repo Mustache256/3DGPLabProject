@@ -49,6 +49,12 @@ int main()
 		0.5f, -0.5f, 0.0f
 	};
 
+	const GLfloat colors[] = {
+		1.0f, 0.0f, 0.0f, 1.0f,
+		0.0f, 1.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f, 1.0f,
+	};
+
 	GLuint positionsVboId = 0;
 
 	// Create a new VBO on the GPU and bind it
@@ -66,6 +72,25 @@ int main()
 
 	// Reset the state
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	GLuint colorsVboId = 0;
+
+	// Create a colors VBO on the GPU and bind it
+	glGenBuffers(1, &colorsVboId);
+
+	if (!colorsVboId)
+	{
+		throw std::exception();
+	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, colorsVboId);
+
+	// Upload a copy of the data from memory into the new VBO
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+
+	// Bind the color VBO, assign it to position 1 on the bound VAO
+	// and flag it to be used
+	
 
 	GLuint vaoId = 0;
 
@@ -86,6 +111,12 @@ int main()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
 
 	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, colorsVboId);
+
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)0);
+
+	glEnableVertexAttribArray(1);
 
 	// Reset the state
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -132,27 +163,19 @@ int main()
 	// Ensure the VAO "position" attribute stream gets set as the first position
 	// during the link.
 	glBindAttribLocation(programId, 0, "in_Position");
+	glBindAttribLocation(programId, 1, "a_Color");
 
 
 	// Perform the link and check for failure
 	glLinkProgram(programId);
-	GLint colorUniformId = glGetUniformLocation(programId, "u_Color");
-	
-	if (colorUniformId == -1)
-	{
-		throw std::exception();
-	}
-
 	glUseProgram(programId);
-	glUniform4f(colorUniformId, 0, 1, 0, 1);
-	glUseProgram(0);
 
-	/*glGetProgramiv(programId, GL_LINK_STATUS, &success);
+	glGetProgramiv(programId, GL_LINK_STATUS, &success);
 
 	if (!success)
 	{
 		throw std::exception();
-	}*/
+	}
 
 	// Detach and destroy the shader objects. These are no longer needed
 	// because we now have a complete shader program.
