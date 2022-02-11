@@ -133,14 +133,26 @@ int main()
 	// during the link.
 	glBindAttribLocation(programId, 0, "in_Position");
 
+
 	// Perform the link and check for failure
 	glLinkProgram(programId);
-	glGetProgramiv(programId, GL_LINK_STATUS, &success);
+	GLint colorUniformId = glGetUniformLocation(programId, "u_Color");
+	
+	if (colorUniformId == -1)
+	{
+		throw std::exception();
+	}
+
+	glUseProgram(programId);
+	glUniform4f(colorUniformId, 0, 1, 0, 1);
+	glUseProgram(0);
+
+	/*glGetProgramiv(programId, GL_LINK_STATUS, &success);
 
 	if (!success)
 	{
 		throw std::exception();
-	}
+	}*/
 
 	// Detach and destroy the shader objects. These are no longer needed
 	// because we now have a complete shader program.
