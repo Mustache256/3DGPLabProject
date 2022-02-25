@@ -1,8 +1,10 @@
 #define SDL_MAIN_HANDLED
+#define STB_IMAGE_IMPLEMENTATION
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
+#include <stb_image.h>
 
 #include <iostream>
 #include <stdexcept>
@@ -58,6 +60,16 @@ int main()
 	};
 
 	GLuint positionsVboId = 0;
+
+	int w = 0;
+	int h = 0;
+
+	unsigned char* data = stbi_load("image.png", &w, &h, NULL, 4);
+
+	if (!data)
+	{
+		throw std::exception();
+	}
 
 	// Create a new VBO on the GPU and bind it
 	glGenBuffers(1, &positionsVboId);
