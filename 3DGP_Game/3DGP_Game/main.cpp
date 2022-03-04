@@ -1,15 +1,17 @@
 #define SDL_MAIN_HANDLED
-#define STB_IMAGE_IMPLEMENTATION
+//#define STB_IMAGE_IMPLEMENTATION
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include <stb_image.h>
+#include <wavefront/wavefront.h>
 
 #include <iostream>
 #include <stdexcept>
 #include <string>
 #include <fstream>
+#include <vector>
 
 std::string fileRead(std::string fileName)
 {
@@ -59,6 +61,16 @@ int main()
 		0.0f, 0.0f, 1.0f, 1.0f,
 	};
 
+	const GLfloat texCoords[] = {
+		0.0f, 0.0f,
+		0.0f, 1.0f,
+		1.0f, 1.0f,
+
+		1.0f, 1.0f,
+		1.0f, 0.0f,
+		0.0f, 0.0f
+	};
+
 	GLuint positionsVboId = 0;
 
 	int w = 0;
@@ -104,7 +116,23 @@ int main()
 
 	// Bind the color VBO, assign it to position 1 on the bound VAO
 	// and flag it to be used
-	
+	GLuint texCoordsVboId = 0;
+
+	//Texture stuff
+	glGenBuffers(1, &texCoordsVboId);
+
+	if (!texCoordsVboId)
+	{
+		throw std::exception();
+	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, texCoordsVboId);
+
+	// Upload a copy of the data from memory into the new VBO
+	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 
 	GLuint vaoId = 0;
 
@@ -151,6 +179,13 @@ int main()
 
 	if (!success)
 	{
+		GLint maxLength = 0;
+		glGetShaderiv(vertexShaderId, GL_INFO_LOG_LENGTH,
+			&maxLength);
+		std::vector<GLchar> errorLog(maxLength);
+		glGetShaderInfoLog(vertexShaderId, maxLength,
+			&maxLength, &errorLog[0]);
+		std::cout << &errorLog.at(0) << std::endl;
 		throw std::exception();
 	}
 
@@ -166,6 +201,13 @@ int main()
 
 	if (!success)
 	{
+		GLint maxLength = 0;
+		glGetShaderiv(fragmentShaderId, GL_INFO_LOG_LENGTH,
+			&maxLength);
+		std::vector<GLchar> errorLog(maxLength);
+		glGetShaderInfoLog(fragmentShaderId, maxLength,
+			&maxLength, &errorLog[0]);
+		std::cout << &errorLog.at(0) << std::endl;
 		throw std::exception();
 	}
 
@@ -177,7 +219,7 @@ int main()
 	// Ensure the VAO "position" attribute stream gets set as the first position
 	// during the link.
 	glBindAttribLocation(programId, 0, "a_Position");
-	glBindAttribLocation(programId, 1, "a_Color");
+	glBindAttribLocation(programId, 1, "a_TexCoord");
 
 
 	// Perform the link and check for failure
@@ -197,6 +239,26 @@ int main()
 	glDeleteShader(vertexShaderId);
 	glDetachShader(programId, fragmentShaderId);
 	glDeleteShader(fragmentShaderId);
+
+	GLuint textureId = 0;
+	glGenTextures(1, &textureId);
+	if (!textureId)
+	{
+		std::cout << "NO TEXTURE ID FOUND" << std::endl;
+		throw std::exception();
+	}
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	free(data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	WfModel curuthers = { 0 };
+
+	if (WfModelLoad("models/curuthers/curuthers.obj", &curuthers) != 0)
+	{
+		throw std::runtime_error("Failed to load model");
+	}
 
 	GLint modelLoc = glGetUniformLocation(programId, "u_Model");
 	GLint projectionLoc = glGetUniformLocation(programId, "u_Projection");
@@ -218,14 +280,14 @@ int main()
 
 		//Clear red
 		glClearColor(0, 0.5f, 0.5f, 1);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Prepare the perspective projection matrix
 		glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)600 / (float)600, 0.1f, 100.f);
 
 		// Prepare the model matrix
 		glm::mat4 model(1.0f);
-		model = glm::translate(model, glm::vec3(0, 0, -2.5f));
+		model = glm::translate(model, glm::vec3(0, 0, -20.5f));
 		model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
 
 		// Increase the float angle so next frame the triangle rotates further
@@ -234,6 +296,12 @@ int main()
 		// Make sure the current program is bound
 
 		glUseProgram(programId);
+		glBindVertexArray(vaoId);
+		glBindTexture(GL_TEXTURE_2D, curuthers.textureId);
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_BLEND);
+		glEnable(GL_DEPTH_TEST);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// Upload the model matrix
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -243,12 +311,16 @@ int main()
 
 		// Instruct OpenGL to use our shader program and our VAO
 		
-		glBindVertexArray(vaoId);
+		glBindVertexArray(curuthers.vaoId);
+		//glBindTexture(GL_TEXTURE_2D, curuthers.vertexCount);
 
 		// Draw 3 vertices (a triangle)
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, curuthers.vertexCount);
 
 		// Reset the state
+		glDisable(GL_BLEND);
+		glDisable(GL_CULL_FACE);
+		glDisable(GL_DEPTH_TEST);
 		glBindVertexArray(0);
 		glUseProgram(0);
 

@@ -1,10 +1,13 @@
 attribute vec3 a_Position;
-attribute vec4 a_Color;
+attribute vec2 a_TexCoord;
+
 uniform mat4 u_Projection;
 uniform mat4 u_Model;
-varying vec4 v_Color;
+
+varying vec2 TexCoord;
+
 void main()
 {
   gl_Position = u_Projection * u_Model * vec4(a_Position, 1.0);
-  v_Color = a_Color;
+  TexCoord = a_TexCoord;
 }
