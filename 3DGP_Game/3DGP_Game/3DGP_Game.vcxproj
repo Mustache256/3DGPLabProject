@@ -129,10 +129,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="colorsVBO.cpp" />
+    <ClCompile Include="fragmentShader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="positionsVBO.cpp" />
+    <ClCompile Include="renderTexture.cpp" />
+    <ClCompile Include="textureCoordsVBO.cpp" />
+    <ClCompile Include="vertexShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="colorsVBO.h" />
     <ClInclude Include="contrib\include\stb_image.h" />
+    <ClInclude Include="fragmentShader.h" />
+    <ClInclude Include="positionsVBO.h" />
+    <ClInclude Include="renderTexture.h" />
+    <ClInclude Include="textureCoordsVBO.h" />
+    <ClInclude Include="vertexShader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

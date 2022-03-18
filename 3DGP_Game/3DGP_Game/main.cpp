@@ -13,6 +13,8 @@
 #include <fstream>
 #include <vector>
 
+#include "renderTexture.h"
+
 std::string fileRead(std::string fileName)
 {
 	std::string line;
@@ -180,11 +182,9 @@ int main()
 	if (!success)
 	{
 		GLint maxLength = 0;
-		glGetShaderiv(vertexShaderId, GL_INFO_LOG_LENGTH,
-			&maxLength);
+		glGetShaderiv(vertexShaderId, GL_INFO_LOG_LENGTH, &maxLength);
 		std::vector<GLchar> errorLog(maxLength);
-		glGetShaderInfoLog(vertexShaderId, maxLength,
-			&maxLength, &errorLog[0]);
+		glGetShaderInfoLog(vertexShaderId, maxLength, &maxLength, &errorLog[0]);
 		std::cout << &errorLog.at(0) << std::endl;
 		throw std::exception();
 	}
@@ -202,11 +202,9 @@ int main()
 	if (!success)
 	{
 		GLint maxLength = 0;
-		glGetShaderiv(fragmentShaderId, GL_INFO_LOG_LENGTH,
-			&maxLength);
+		glGetShaderiv(fragmentShaderId, GL_INFO_LOG_LENGTH, &maxLength);
 		std::vector<GLchar> errorLog(maxLength);
-		glGetShaderInfoLog(fragmentShaderId, maxLength,
-			&maxLength, &errorLog[0]);
+		glGetShaderInfoLog(fragmentShaderId, maxLength, &maxLength, &errorLog[0]);
 		std::cout << &errorLog.at(0) << std::endl;
 		throw std::exception();
 	}
@@ -240,6 +238,8 @@ int main()
 	glDetachShader(programId, fragmentShaderId);
 	glDeleteShader(fragmentShaderId);
 
+	//Model Redering
+	//Texture Creation
 	GLuint textureId = 0;
 	glGenTextures(1, &textureId);
 	if (!textureId)
@@ -253,6 +253,7 @@ int main()
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
+	//Model Loading
 	WfModel curuthers = { 0 };
 
 	if (WfModelLoad("models/curuthers/curuthers.obj", &curuthers) != 0)
@@ -266,6 +267,8 @@ int main()
 	float angle = 0;
 	bool quit = false;
 
+	RenderTexture rt(256, 256);
+
 	while (!quit)
 	{
 		SDL_Event event = { 0 };
@@ -277,9 +280,9 @@ int main()
 				quit = true;
 			}
 		}
-
+		rt.bind();
 		//Clear red
-		glClearColor(0, 0.5f, 0.5f, 1);
+		glClearColor(0, 1.0f, 0.5f, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Prepare the perspective projection matrix
@@ -287,7 +290,7 @@ int main()
 
 		// Prepare the model matrix
 		glm::mat4 model(1.0f);
-		model = glm::translate(model, glm::vec3(0, 0, -20.5f));
+		model = glm::translate(model, glm::vec3(0, 0, -3.0f));
 		model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
 
 		// Increase the float angle so next frame the triangle rotates further
@@ -323,7 +326,53 @@ int main()
 		glDisable(GL_DEPTH_TEST);
 		glBindVertexArray(0);
 		glUseProgram(0);
+		rt.unbind();
+		/////////////////////////////////////////////////////////////////////
+		////Clear red
+		glClearColor(0, 0.5f, 0.5f, 1);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		// Prepare the perspective projection matrix
+		projection = glm::perspective(glm::radians(45.0f), (float)600 / (float)600, 0.1f, 100.f);
+
+		// Prepare the model matrix
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0, 0, -10.5f));
+		model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
+
+		// Increase the float angle so next frame the triangle rotates further
+		angle += 1.0f;
+
+		// Make sure the current program is bound
+
+		glUseProgram(programId);
+		glBindVertexArray(vaoId);
+		glBindTexture(GL_TEXTURE_2D, rt.getTexture());
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_BLEND);
+		glEnable(GL_DEPTH_TEST);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		// Upload the model matrix
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		// Upload the projection matrix
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+		// Instruct OpenGL to use our shader program and our VAO
+
+		glBindVertexArray(curuthers.vaoId);
+		//glBindTexture(GL_TEXTURE_2D, curuthers.vertexCount);
+
+		// Draw 3 vertices (a triangle)
+		glDrawArrays(GL_TRIANGLES, 0, curuthers.vertexCount);
+
+		// Reset the state
+		glDisable(GL_BLEND);
+		glDisable(GL_CULL_FACE);
+		glDisable(GL_DEPTH_TEST);
+		glBindVertexArray(0);
+		glUseProgram(0);
 		//Update buffers
 		SDL_GL_SwapWindow(window);
 	}
