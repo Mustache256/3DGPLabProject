@@ -14,6 +14,8 @@
 #include <vector>
 
 #include "renderTexture.h"
+#include "Mesh.h"
+#include "Shader.h"
 
 std::string fileRead(std::string fileName)
 {
@@ -50,6 +52,10 @@ int main()
 	{
 		throw std::runtime_error("Failed to initialise glew");
 	}
+
+	Mesh quad(0);
+	//Shader ls("vertexShaderText.txt", "fragmentShaderText.txt");
+	Shader bs("basicVertexShaderText.txt", "basicFragmentShaderText.txt");
 
 	const GLfloat positions[] = {
 		0.0f, 0.5f, 0.0f,
@@ -281,8 +287,9 @@ int main()
 			}
 		}
 		rt.bind();
+
 		//Clear red
-		glClearColor(0, 1.0f, 0.5f, 1);
+		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Prepare the perspective projection matrix
@@ -328,51 +335,56 @@ int main()
 		glUseProgram(0);
 		rt.unbind();
 		/////////////////////////////////////////////////////////////////////
-		////Clear red
-		glClearColor(0, 0.5f, 0.5f, 1);
+		////Clear blue
+		glClearColor(0.0f, 0.0f, 1.0f, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Prepare the perspective projection matrix
-		projection = glm::perspective(glm::radians(45.0f), (float)600 / (float)600, 0.1f, 100.f);
+		//projection = glm::perspective(glm::radians(45.0f), (float)600 / (float)600, 0.1f, 100.f);
 
-		// Prepare the model matrix
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0, 0, -10.5f));
-		model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
+		//// Prepare the model matrix
+		//model = glm::mat4(1.0f);
+		//model = glm::translate(model, glm::vec3(0, 0, -10.5f));
+		//model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
 
-		// Increase the float angle so next frame the triangle rotates further
-		angle += 1.0f;
+		//// Increase the float angle so next frame the triangle rotates further
+		//angle += 1.0f;
 
-		// Make sure the current program is bound
+		//// Make sure the current program is bound
 
-		glUseProgram(programId);
-		glBindVertexArray(vaoId);
-		glBindTexture(GL_TEXTURE_2D, rt.getTexture());
-		glEnable(GL_CULL_FACE);
-		glEnable(GL_BLEND);
-		glEnable(GL_DEPTH_TEST);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glUseProgram(programId);
+		//glBindVertexArray(vaoId);
+		//glBindTexture(GL_TEXTURE_2D, rt.getTexture());
+		//glEnable(GL_CULL_FACE);
+		//glEnable(GL_BLEND);
+		//glEnable(GL_DEPTH_TEST);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		// Upload the model matrix
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		//// Upload the model matrix
+		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-		// Upload the projection matrix
-		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		//// Upload the projection matrix
+		//glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-		// Instruct OpenGL to use our shader program and our VAO
+		//// Instruct OpenGL to use our shader program and our VAO
 
-		glBindVertexArray(curuthers.vaoId);
-		//glBindTexture(GL_TEXTURE_2D, curuthers.vertexCount);
+		//glBindVertexArray(curuthers.vaoId);
+		////glBindTexture(GL_TEXTURE_2D, curuthers.vertexCount);
 
-		// Draw 3 vertices (a triangle)
-		glDrawArrays(GL_TRIANGLES, 0, curuthers.vertexCount);
+		//// Draw 3 vertices (a triangle)
+		//glDrawArrays(GL_TRIANGLES, 0, curuthers.vertexCount);
 
-		// Reset the state
-		glDisable(GL_BLEND);
-		glDisable(GL_CULL_FACE);
-		glDisable(GL_DEPTH_TEST);
-		glBindVertexArray(0);
-		glUseProgram(0);
+		//// Reset the state
+		//glDisable(GL_BLEND);
+		//glDisable(GL_CULL_FACE);
+		//glDisable(GL_DEPTH_TEST);
+		//glBindVertexArray(0);
+		//glUseProgram(0);
+
+		glUseProgram(bs.getProgId());
+		glBindVertexArray(quad.getId());
+		glDrawArrays(GL_TRIANGLES, 0, quad.vertCount());
+
 		//Update buffers
 		SDL_GL_SwapWindow(window);
 	}
