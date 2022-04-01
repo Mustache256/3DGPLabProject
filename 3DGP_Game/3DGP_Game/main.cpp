@@ -27,7 +27,7 @@ std::string fileRead(std::string fileName)
 		while (getline(fileRead, line))
 		{
 			std::cout << line << std::endl;
-			fileString += line;
+			fileString += line + "\n";
 		}
 	}
 	else
@@ -273,7 +273,7 @@ int main()
 	float angle = 0;
 	bool quit = false;
 
-	RenderTexture rt(256, 256);
+	RenderTexture rt(1024, 1024);
 
 	while (!quit)
 	{
@@ -286,6 +286,7 @@ int main()
 				quit = true;
 			}
 		}
+		glViewport(0, 0, 1024, 1024);
 		rt.bind();
 
 		//Clear red
@@ -297,7 +298,7 @@ int main()
 
 		// Prepare the model matrix
 		glm::mat4 model(1.0f);
-		model = glm::translate(model, glm::vec3(0, 0, -3.0f));
+		model = glm::translate(model, glm::vec3(0, 0, -10.0f));
 		model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
 
 		// Increase the float angle so next frame the triangle rotates further
@@ -333,6 +334,7 @@ int main()
 		glDisable(GL_DEPTH_TEST);
 		glBindVertexArray(0);
 		glUseProgram(0);
+		glViewport(0, 0, 800, 600);
 		rt.unbind();
 		/////////////////////////////////////////////////////////////////////
 		////Clear blue
@@ -383,7 +385,9 @@ int main()
 
 		glUseProgram(bs.getProgId());
 		glBindVertexArray(quad.getId());
+		glBindTexture(GL_TEXTURE_2D, rt.getTexture());
 		glDrawArrays(GL_TRIANGLES, 0, quad.vertCount());
+
 
 		//Update buffers
 		SDL_GL_SwapWindow(window);

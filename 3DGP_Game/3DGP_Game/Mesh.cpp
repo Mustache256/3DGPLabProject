@@ -7,7 +7,11 @@
 const GLfloat positions[] = {
 	-1.0f, 1.0f, 0.0f,
 	-1.0f, -1.0f, 0.0f,
-	1.0f, -1.0f, 0.0f
+	1.0f, -1.0f, 0.0f,
+
+	1.0f, -1.0f, 0.0f,
+	1.0f, 1.0f, 0.0f,
+	-1.0f, 1.0f, 0.0f
 };
 
 Mesh::Mesh(int _type)
@@ -53,5 +57,5 @@ GLuint Mesh::getId()
 
 int Mesh::vertCount()
 {
-	return 3;
+	return 6;
 }

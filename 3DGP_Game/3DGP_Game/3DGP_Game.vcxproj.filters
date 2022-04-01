@@ -35,12 +35,6 @@
     <ClInclude Include="renderTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="colorsVBO.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="fragmentShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
