@@ -6,6 +6,7 @@
 #include <glm/ext.hpp>
 #include <stb_image.h>
 #include <wavefront/wavefront.h>
+#include <SDL2/SDL_keycode.h>
 
 #include <iostream>
 #include <stdexcept>
@@ -39,7 +40,7 @@ std::string fileRead(std::string fileName)
 	return fileString;
 }
 
-int main()
+SDL_Window* RenderWindow()
 {
 	SDL_Window* window = SDL_CreateWindow("OpenGL Test", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
@@ -52,6 +53,13 @@ int main()
 	{
 		throw std::runtime_error("Failed to initialise glew");
 	}
+
+	return window;
+}
+
+int main()
+{
+	SDL_Window* window = RenderWindow();
 
 	Mesh quad(0);
 	//Shader ls("vertexShaderText.txt", "fragmentShaderText.txt");
@@ -275,12 +283,69 @@ int main()
 
 	RenderTexture rt(1024, 1024);
 
+	int moveCheck = 0;
+
+	glm::mat4 model(1.0f);
+	model = glm::translate(model, glm::vec3(0, 0, -20.0f));
+
 	while (!quit)
 	{
 		SDL_Event event = { 0 };
 
 		while (SDL_PollEvent(&event))
 		{
+			switch (event.type)
+			{
+			case SDL_KEYDOWN:
+				//std::cout << "Key Down" << std::endl;
+				switch (event.key.keysym.sym)
+				{
+				case SDLK_a:
+					std::cout << "Left key pressed" << std::endl;
+					moveCheck = 1;
+					break;
+				case SDLK_d:
+					std::cout << "Right key pressed" << std::endl;
+					moveCheck = 2;
+					break;
+				case SDLK_w:
+					std::cout << "Up key pressed" << std::endl;
+					moveCheck = 3;
+					break;
+				case SDLK_s:
+					std::cout << "Down key pressed" << std::endl;
+					moveCheck = 4;
+					break;
+				}
+				break;
+			case SDL_KEYUP:
+				//std::cout << "Key Up" << std::endl;
+				switch (event.key.keysym.sym)
+				{
+				case SDLK_a:
+					std::cout << "Left key released" << std::endl;
+					moveCheck = 0;
+					angle = 0;
+					break;
+				case SDLK_d:
+					std::cout << "Right key released" << std::endl;
+					moveCheck = 0;
+					angle = 0;
+					break;
+				case SDLK_w:
+					std::cout << "Up key released" << std::endl;
+					moveCheck = 0;
+					break;
+				case SDLK_s:
+					std::cout << "Down key released" << std::endl;
+					moveCheck = 0;
+					break;
+				}
+				break;
+			default:
+				break;
+			}
+				
 			if (event.type == SDL_QUIT)
 			{
 				quit = true;
@@ -297,12 +362,31 @@ int main()
 		glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)600 / (float)600, 0.1f, 100.f);
 
 		// Prepare the model matrix
-		glm::mat4 model(1.0f);
-		model = glm::translate(model, glm::vec3(0, 0, -10.0f));
-		model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
+		
+		//model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
 
-		// Increase the float angle so next frame the triangle rotates further
-		angle += 1.0f;
+		//// Increase the float angle so next frame the triangle rotates further
+		//angle += 1.0f;
+
+		switch (moveCheck)
+		{
+		case 1:
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
+			angle = 1.0f;
+			break;
+		case 2:
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
+			angle = -1.0f;
+			break;
+		case 3:
+			model += glm::translate(model, glm::vec3(0, 0.5f, 0));
+			break;
+		case 4:
+			model += glm::translate(model, glm::vec3(0, -0.5f, 0));
+			break;
+		default:
+			break;
+		}
 
 		// Make sure the current program is bound
 
