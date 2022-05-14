@@ -1,0 +1,9 @@
+﻿  main.cpp
+  Mesh.cpp
+  renderTexture.cpp
+  Shader.cpp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 278 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  3DGP_Game.vcxproj -> \\bournemouth.ac.uk\data\student\home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\Release\3DGP_Game.exe

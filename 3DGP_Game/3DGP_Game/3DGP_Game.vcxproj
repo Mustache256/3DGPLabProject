@@ -131,12 +131,14 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Movement.cpp" />
     <ClCompile Include="renderTexture.cpp" />
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="contrib\include\stb_image.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Movement.h" />
     <ClInclude Include="renderTexture.h" />
     <ClInclude Include="Shader.h" />
   </ItemGroup>

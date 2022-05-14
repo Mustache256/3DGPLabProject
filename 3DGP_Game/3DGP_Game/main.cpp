@@ -6,7 +6,6 @@
 #include <glm/ext.hpp>
 #include <stb_image.h>
 #include <wavefront/wavefront.h>
-#include <SDL2/SDL_keycode.h>
 
 #include <iostream>
 #include <stdexcept>
@@ -17,6 +16,7 @@
 #include "renderTexture.h"
 #include "Mesh.h"
 #include "Shader.h"
+#include "Movement.h"
 
 std::string fileRead(std::string fileName)
 {
@@ -62,10 +62,10 @@ int main()
 	SDL_Window* window = RenderWindow();
 
 	Mesh quad(0);
-	//Shader ls("vertexShaderText.txt", "fragmentShaderText.txt");
+	Shader ls("vertexShaderText.txt", "fragmentShaderText.txt");
 	Shader bs("basicVertexShaderText.txt", "basicFragmentShaderText.txt");
 
-	const GLfloat positions[] = {
+	/*const GLfloat positions[] = {
 		0.0f, 0.5f, 0.0f,
 		-0.5f, -0.5f, 0.0f,
 		0.5f, -0.5f, 0.0f
@@ -97,164 +97,164 @@ int main()
 	if (!data)
 	{
 		throw std::exception();
-	}
+	}*/
 
 	// Create a new VBO on the GPU and bind it
-	glGenBuffers(1, &positionsVboId);
+	//glGenBuffers(1, &positionsVboId);
 
-	if (!positionsVboId)
-	{
-		throw std::exception();
-	}
+	//if (!positionsVboId)
+	//{
+	//	throw std::exception();
+	//}
 
-	glBindBuffer(GL_ARRAY_BUFFER, positionsVboId);
+	//glBindBuffer(GL_ARRAY_BUFFER, positionsVboId);
 
-	// Upload a copy of the data from memory into the new VBO
-	glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
+	//// Upload a copy of the data from memory into the new VBO
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
 
-	// Reset the state
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//// Reset the state
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	GLuint colorsVboId = 0;
+	//GLuint colorsVboId = 0;
 
-	// Create a colors VBO on the GPU and bind it
-	glGenBuffers(1, &colorsVboId);
+	//// Create a colors VBO on the GPU and bind it
+	//glGenBuffers(1, &colorsVboId);
 
-	if (!colorsVboId)
-	{
-		throw std::exception();
-	}
+	//if (!colorsVboId)
+	//{
+	//	throw std::exception();
+	//}
 
-	glBindBuffer(GL_ARRAY_BUFFER, colorsVboId);
+	//glBindBuffer(GL_ARRAY_BUFFER, colorsVboId);
 
-	// Upload a copy of the data from memory into the new VBO
-	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+	//// Upload a copy of the data from memory into the new VBO
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
 
-	// Bind the color VBO, assign it to position 1 on the bound VAO
-	// and flag it to be used
-	GLuint texCoordsVboId = 0;
+	//// Bind the color VBO, assign it to position 1 on the bound VAO
+	//// and flag it to be used
+	//GLuint texCoordsVboId = 0;
 
-	//Texture stuff
-	glGenBuffers(1, &texCoordsVboId);
+	////Texture stuff
+	//glGenBuffers(1, &texCoordsVboId);
 
-	if (!texCoordsVboId)
-	{
-		throw std::exception();
-	}
+	//if (!texCoordsVboId)
+	//{
+	//	throw std::exception();
+	//}
 
-	glBindBuffer(GL_ARRAY_BUFFER, texCoordsVboId);
+	//glBindBuffer(GL_ARRAY_BUFFER, texCoordsVboId);
 
-	// Upload a copy of the data from memory into the new VBO
-	glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
+	//// Upload a copy of the data from memory into the new VBO
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(texCoords), texCoords, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-
-	GLuint vaoId = 0;
-
-	// Create a new VAO on the GPU and bind it
-	glGenVertexArrays(1, &vaoId);
-
-	if (!vaoId)
-	{
-		throw std::exception();
-	}
-
-	glBindVertexArray(vaoId);
-
-	// Bind the position VBO, assign it to position 0 on the bound VAO
-	// and flag it to be used
-	glBindBuffer(GL_ARRAY_BUFFER, positionsVboId);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
-
-	glEnableVertexAttribArray(0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, colorsVboId);
-
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)0);
-
-	glEnableVertexAttribArray(1);
-
-	// Reset the state
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
-	std::string text = fileRead("vertexShaderText.txt");
-	const GLchar* vertexShaderSrc = text.c_str();
-	
-	// Create a new vertex shader, attach source code, compile it and
-	// check for errors.
-	GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShaderId, 1, &vertexShaderSrc, NULL);
-	glCompileShader(vertexShaderId);
-
-	GLint success = 0;
-
-	glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &success);
-
-	if (!success)
-	{
-		GLint maxLength = 0;
-		glGetShaderiv(vertexShaderId, GL_INFO_LOG_LENGTH, &maxLength);
-		std::vector<GLchar> errorLog(maxLength);
-		glGetShaderInfoLog(vertexShaderId, maxLength, &maxLength, &errorLog[0]);
-		std::cout << &errorLog.at(0) << std::endl;
-		throw std::exception();
-	}
-
-	text = fileRead("fragmentShaderText.txt");
-	const GLchar* fragmentShaderSrc = text.c_str();
-
-	// Create a new fragment shader, attach source code, compile it and
-	// check for errors.
-	GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShaderId, 1, &fragmentShaderSrc, NULL);
-	glCompileShader(fragmentShaderId);
-	glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &success);
-
-	if (!success)
-	{
-		GLint maxLength = 0;
-		glGetShaderiv(fragmentShaderId, GL_INFO_LOG_LENGTH, &maxLength);
-		std::vector<GLchar> errorLog(maxLength);
-		glGetShaderInfoLog(fragmentShaderId, maxLength, &maxLength, &errorLog[0]);
-		std::cout << &errorLog.at(0) << std::endl;
-		throw std::exception();
-	}
-
-	// Create new shader program and attach our shader objects
-	GLuint programId = glCreateProgram();
-	glAttachShader(programId, vertexShaderId);
-	glAttachShader(programId, fragmentShaderId);
-
-	// Ensure the VAO "position" attribute stream gets set as the first position
-	// during the link.
-	glBindAttribLocation(programId, 0, "a_Position");
-	glBindAttribLocation(programId, 1, "a_TexCoord");
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
-	// Perform the link and check for failure
-	glLinkProgram(programId);
-	glUseProgram(programId);
+	//GLuint vaoId = 0;
 
-	glGetProgramiv(programId, GL_LINK_STATUS, &success);
+	//// Create a new VAO on the GPU and bind it
+	//glGenVertexArrays(1, &vaoId);
 
-	if (!success)
-	{
-		throw std::exception();
-	}
+	//if (!vaoId)
+	//{
+	//	throw std::exception();
+	//}
 
-	// Detach and destroy the shader objects. These are no longer needed
-	// because we now have a complete shader program.
-	glDetachShader(programId, vertexShaderId);
-	glDeleteShader(vertexShaderId);
-	glDetachShader(programId, fragmentShaderId);
-	glDeleteShader(fragmentShaderId);
+	//glBindVertexArray(vaoId);
+
+	//// Bind the position VBO, assign it to position 0 on the bound VAO
+	//// and flag it to be used
+	//glBindBuffer(GL_ARRAY_BUFFER, positionsVboId);
+
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+
+	//glEnableVertexAttribArray(0);
+
+	//glBindBuffer(GL_ARRAY_BUFFER, colorsVboId);
+
+	//glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)0);
+
+	//glEnableVertexAttribArray(1);
+
+	//// Reset the state
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//glBindVertexArray(0);
+
+	//std::string text = fileRead("vertexShaderText.txt");
+	//const GLchar* vertexShaderSrc = text.c_str();
+	//
+	//// Create a new vertex shader, attach source code, compile it and
+	//// check for errors.
+	//GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
+	//glShaderSource(vertexShaderId, 1, &vertexShaderSrc, NULL);
+	//glCompileShader(vertexShaderId);
+
+	//GLint success = 0;
+
+	//glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &success);
+
+	//if (!success)
+	//{
+	//	GLint maxLength = 0;
+	//	glGetShaderiv(vertexShaderId, GL_INFO_LOG_LENGTH, &maxLength);
+	//	std::vector<GLchar> errorLog(maxLength);
+	//	glGetShaderInfoLog(vertexShaderId, maxLength, &maxLength, &errorLog[0]);
+	//	std::cout << &errorLog.at(0) << std::endl;
+	//	throw std::exception();
+	//}
+
+	//text = fileRead("fragmentShaderText.txt");
+	//const GLchar* fragmentShaderSrc = text.c_str();
+
+	//// Create a new fragment shader, attach source code, compile it and
+	//// check for errors.
+	//GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
+	//glShaderSource(fragmentShaderId, 1, &fragmentShaderSrc, NULL);
+	//glCompileShader(fragmentShaderId);
+	//glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &success);
+
+	//if (!success)
+	//{
+	//	GLint maxLength = 0;
+	//	glGetShaderiv(fragmentShaderId, GL_INFO_LOG_LENGTH, &maxLength);
+	//	std::vector<GLchar> errorLog(maxLength);
+	//	glGetShaderInfoLog(fragmentShaderId, maxLength, &maxLength, &errorLog[0]);
+	//	std::cout << &errorLog.at(0) << std::endl;
+	//	throw std::exception();
+	//}
+
+	//// Create new shader program and attach our shader objects
+	//GLuint programId = glCreateProgram();
+	//glAttachShader(programId, vertexShaderId);
+	//glAttachShader(programId, fragmentShaderId);
+
+	//// Ensure the VAO "position" attribute stream gets set as the first position
+	//// during the link.
+	//glBindAttribLocation(programId, 0, "a_Position");
+	//glBindAttribLocation(programId, 1, "a_TexCoord");
+
+
+	//// Perform the link and check for failure
+	//glLinkProgram(programId);
+	//glUseProgram(programId);
+
+	//glGetProgramiv(programId, GL_LINK_STATUS, &success);
+
+	//if (!success)
+	//{
+	//	throw std::exception();
+	//}
+
+	//// Detach and destroy the shader objects. These are no longer needed
+	//// because we now have a complete shader program.
+	//glDetachShader(programId, vertexShaderId);
+	//glDeleteShader(vertexShaderId);
+	//glDetachShader(programId, fragmentShaderId);
+	//glDeleteShader(fragmentShaderId);
 
 	//Model Redering
 	//Texture Creation
-	GLuint textureId = 0;
+	/*GLuint textureId = 0;
 	glGenTextures(1, &textureId);
 	if (!textureId)
 	{
@@ -265,7 +265,7 @@ int main()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	free(data);
 	glGenerateMipmap(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);*/
 
 	//Model Loading
 	WfModel curuthers = { 0 };
@@ -275,13 +275,14 @@ int main()
 		throw std::runtime_error("Failed to load model");
 	}
 
-	GLint modelLoc = glGetUniformLocation(programId, "u_Model");
-	GLint projectionLoc = glGetUniformLocation(programId, "u_Projection");
+	GLint modelLoc = glGetUniformLocation(ls.getProgId(), "u_Model");
+	GLint projectionLoc = glGetUniformLocation(ls.getProgId(), "u_Projection");
 
 	float angle = 0;
 	bool quit = false;
 
 	RenderTexture rt(1024, 1024);
+	Movement* movement = new Movement();
 
 	int moveCheck = 0;
 
@@ -294,65 +295,16 @@ int main()
 
 		while (SDL_PollEvent(&event))
 		{
-			switch (event.type)
-			{
-			case SDL_KEYDOWN:
-				//std::cout << "Key Down" << std::endl;
-				switch (event.key.keysym.sym)
-				{
-				case SDLK_a:
-					std::cout << "Left key pressed" << std::endl;
-					moveCheck = 1;
-					break;
-				case SDLK_d:
-					std::cout << "Right key pressed" << std::endl;
-					moveCheck = 2;
-					break;
-				case SDLK_w:
-					std::cout << "Up key pressed" << std::endl;
-					moveCheck = 3;
-					break;
-				case SDLK_s:
-					std::cout << "Down key pressed" << std::endl;
-					moveCheck = 4;
-					break;
-				}
-				break;
-			case SDL_KEYUP:
-				//std::cout << "Key Up" << std::endl;
-				switch (event.key.keysym.sym)
-				{
-				case SDLK_a:
-					std::cout << "Left key released" << std::endl;
-					moveCheck = 0;
-					angle = 0;
-					break;
-				case SDLK_d:
-					std::cout << "Right key released" << std::endl;
-					moveCheck = 0;
-					angle = 0;
-					break;
-				case SDLK_w:
-					std::cout << "Up key released" << std::endl;
-					moveCheck = 0;
-					break;
-				case SDLK_s:
-					std::cout << "Down key released" << std::endl;
-					moveCheck = 0;
-					break;
-				}
-				break;
-			default:
-				break;
-			}
-				
 			if (event.type == SDL_QUIT)
 			{
 				quit = true;
 			}
 		}
+
+		moveCheck = movement->Move();
+
 		glViewport(0, 0, 1024, 1024);
-		rt.bind();
+		rt.Bind();
 
 		//Clear red
 		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
@@ -372,17 +324,17 @@ int main()
 		{
 		case 1:
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
-			angle = 1.0f;
+			angle = -1.0f;
 			break;
 		case 2:
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
-			angle = -1.0f;
+			angle = 1.0f;
 			break;
 		case 3:
-			model += glm::translate(model, glm::vec3(0, 0.5f, 0));
+			model += glm::translate(model, glm::vec3(0, 0, 0.5f));
 			break;
 		case 4:
-			model += glm::translate(model, glm::vec3(0, -0.5f, 0));
+			model += glm::translate(model, glm::vec3(0, 0, -0.5f));
 			break;
 		default:
 			break;
@@ -390,8 +342,8 @@ int main()
 
 		// Make sure the current program is bound
 
-		glUseProgram(programId);
-		glBindVertexArray(vaoId);
+		glUseProgram(ls.getProgId());
+		glBindVertexArray(quad.getId());
 		glBindTexture(GL_TEXTURE_2D, curuthers.textureId);
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_BLEND);
@@ -419,7 +371,7 @@ int main()
 		glBindVertexArray(0);
 		glUseProgram(0);
 		glViewport(0, 0, 800, 600);
-		rt.unbind();
+		rt.Unbind();
 		/////////////////////////////////////////////////////////////////////
 		////Clear blue
 		glClearColor(0.0f, 0.0f, 1.0f, 1);
@@ -469,7 +421,7 @@ int main()
 
 		glUseProgram(bs.getProgId());
 		glBindVertexArray(quad.getId());
-		glBindTexture(GL_TEXTURE_2D, rt.getTexture());
+		glBindTexture(GL_TEXTURE_2D, rt.GetTexture());
 		glDrawArrays(GL_TRIANGLES, 0, quad.vertCount());
 
 
