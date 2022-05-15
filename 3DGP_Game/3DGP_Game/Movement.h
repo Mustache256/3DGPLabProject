@@ -2,15 +2,17 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 
-struct Movement
+class Movement
 {
+public:
 	Movement();
 	~Movement();
 
 	int Move();
+	bool GetQuit() { return m_quit; }
 
 private:
 	int m_moveCheck;
-	float m_angle;
+	bool m_quit;
 };
 

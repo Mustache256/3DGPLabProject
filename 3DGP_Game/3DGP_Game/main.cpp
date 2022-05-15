@@ -97,7 +97,7 @@ int main()
 	if (!data)
 	{
 		throw std::exception();
-	}*/
+	}
 
 	// Create a new VBO on the GPU and bind it
 	//glGenBuffers(1, &positionsVboId);
@@ -250,7 +250,7 @@ int main()
 	//glDetachShader(programId, vertexShaderId);
 	//glDeleteShader(vertexShaderId);
 	//glDetachShader(programId, fragmentShaderId);
-	//glDeleteShader(fragmentShaderId);
+	//glDeleteShader(fragmentShaderId);*/
 
 	//Model Redering
 	//Texture Creation
@@ -275,6 +275,14 @@ int main()
 		throw std::runtime_error("Failed to load model");
 	}
 
+	WfModel crate = { 0 };
+
+	if (WfModelLoad("models/crate/Crate1.obj", &crate) != 0)
+	{
+		throw std::runtime_error("Failed to load model");
+	}
+
+	
 	GLint modelLoc = glGetUniformLocation(ls.getProgId(), "u_Model");
 	GLint projectionLoc = glGetUniformLocation(ls.getProgId(), "u_Projection");
 
@@ -285,41 +293,22 @@ int main()
 	Movement* movement = new Movement();
 
 	int moveCheck = 0;
-
 	glm::mat4 model(1.0f);
 	model = glm::translate(model, glm::vec3(0, 0, -20.0f));
+	model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 1, 0));
+	glm::mat4 crateModel(1.0f);
+	crateModel = glm::translate(crateModel, glm::vec3(0, 0, -10.0f));
+
+	// Prepare the perspective projection matrix
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)600 / (float)600, 0.1f, 100.f);
 
 	while (!quit)
 	{
-		SDL_Event event = { 0 };
-
-		while (SDL_PollEvent(&event))
-		{
-			if (event.type == SDL_QUIT)
-			{
-				quit = true;
-			}
-		}
-
+		quit = movement->GetQuit();
 		moveCheck = movement->Move();
 
 		glViewport(0, 0, 1024, 1024);
-		rt.Bind();
-
-		//Clear red
-		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		// Prepare the perspective projection matrix
-		glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)600 / (float)600, 0.1f, 100.f);
-
-		// Prepare the model matrix
 		
-		//model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
-
-		//// Increase the float angle so next frame the triangle rotates further
-		//angle += 1.0f;
-
 		switch (moveCheck)
 		{
 		case 1:
@@ -332,14 +321,21 @@ int main()
 			break;
 		case 3:
 			model += glm::translate(model, glm::vec3(0, 0, 0.5f));
+			projection += glm::translate(projection, glm::vec3(0, 0, 0.5f));
 			break;
 		case 4:
 			model += glm::translate(model, glm::vec3(0, 0, -0.5f));
+			projection += glm::translate(projection, glm::vec3(0, 0, -0.5f));
 			break;
 		default:
 			break;
 		}
 
+		rt.Bind();
+
+		//Clear red
+		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// Make sure the current program is bound
 
 		glUseProgram(ls.getProgId());
@@ -359,11 +355,9 @@ int main()
 		// Instruct OpenGL to use our shader program and our VAO
 		
 		glBindVertexArray(curuthers.vaoId);
-		//glBindTexture(GL_TEXTURE_2D, curuthers.vertexCount);
 
 		// Draw 3 vertices (a triangle)
 		glDrawArrays(GL_TRIANGLES, 0, curuthers.vertexCount);
-
 		// Reset the state
 		glDisable(GL_BLEND);
 		glDisable(GL_CULL_FACE);
@@ -377,6 +371,51 @@ int main()
 		glClearColor(0.0f, 0.0f, 1.0f, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		glUseProgram(bs.getProgId());
+		glBindVertexArray(quad.getId());
+		glBindTexture(GL_TEXTURE_2D, rt.GetTexture());
+		glDrawArrays(GL_TRIANGLES, 0, quad.vertCount());
+
+
+		rt.Bind();
+		// Make sure the current program is bound
+
+		glUseProgram(ls.getProgId());
+		glBindVertexArray(quad.getId());
+		glBindTexture(GL_TEXTURE_2D, crate.textureId);
+		//glBindTexture(GL_TEXTURE_2D, crate.textureId);
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_BLEND);
+		glEnable(GL_DEPTH_TEST);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		// Upload the model matrix
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(crateModel));
+
+		// Upload the projection matrix
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+		// Instruct OpenGL to use our shader program and our VAO
+
+		glBindVertexArray(crate.vaoId);
+		//glBindVertexArray(crate.vaoId);
+		//glBindTexture(GL_TEXTURE_2D, curuthers.vertexCount);
+
+		// Draw 3 vertices (a triangle)
+		glDrawArrays(GL_TRIANGLES, 0, crate.vertexCount);
+		//glDrawArrays(GL_TRIANGLES, 1, crate.vertexCount);
+		// Reset the state
+		glDisable(GL_BLEND);
+		glDisable(GL_CULL_FACE);
+		glDisable(GL_DEPTH_TEST);
+		glBindVertexArray(0);
+		glUseProgram(0);
+		glViewport(0, 0, 800, 600);
+		rt.Unbind();
+		/////////////////////////////////////////////////////////////////////
+		////Clear blue
+		glClearColor(0.0f, 0.0f, 1.0f, 1);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		// Prepare the perspective projection matrix
 		//projection = glm::perspective(glm::radians(45.0f), (float)600 / (float)600, 0.1f, 100.f);
 
@@ -429,4 +468,16 @@ int main()
 		SDL_GL_SwapWindow(window);
 	}
 	return 0;
+}
+
+WfModel ModelLoad(const char* filePath)
+{
+	WfModel newModel = { 0 };
+
+	if (WfModelLoad(filePath, &newModel) != 0)
+	{
+		throw std::runtime_error("Failed to load model");
+	}
+
+	return newModel;
 }
