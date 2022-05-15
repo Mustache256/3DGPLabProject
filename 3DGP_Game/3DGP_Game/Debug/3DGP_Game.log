@@ -1,2 +1,15 @@
 ﻿  main.cpp
-  3DGP_Game.vcxproj -> \\bournemouth.ac.uk\data\student\home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\Debug\3DGP_Game.exe
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\contrib\include\wavefront\wavefront.h(4,1): error C2011:  'WfModel': 'struct' type redefinition
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\contrib\include\wavefront\wavefront.h(3): message :  see declaration of 'WfModel'
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\SceneObject.h(19,17): error C2079:  'SceneObject::m_model' uses undefined struct 'WfModel'
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\SceneObject.h(13,21): error C2027:  use of undefined type 'WfModel'
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\contrib\include\wavefront\wavefront.h(3): message :  see declaration of 'WfModel'
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\main.cpp(408,41): error C3867:  'SceneObject::GetModelVaoId': non-standard syntax; use '&' to create a pointer to member
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\main.cpp(482,1): error C2027:  use of undefined type 'WfModel'
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\contrib\include\wavefront\wavefront.h(3): message :  see declaration of 'WfModel'
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\main.cpp(483,21): error C2079:  'newModel' uses undefined struct 'WfModel'
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\main.cpp(485,5): error C2664:  'int WfModelLoad(const char *,WfModel *)': cannot convert argument 2 from 'int *' to 'WfModel *'
+  renderTexture.cpp
+  SceneObject.cpp
+  Generating Code...
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\main.cpp(485,28): message :  Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast

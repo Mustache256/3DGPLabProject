@@ -17,6 +17,9 @@
 #include "Mesh.h"
 #include "Shader.h"
 #include "Movement.h"
+#include "GameObject.h"
+#include "Camera.h"
+#include "SceneObject.h"
 
 std::string fileRead(std::string fileName)
 {
@@ -268,19 +271,21 @@ int main()
 	glBindTexture(GL_TEXTURE_2D, 0);*/
 
 	//Model Loading
-	WfModel curuthers = { 0 };
+	/*WfModel curuthers = { 0 };
 
 	if (WfModelLoad("models/curuthers/curuthers.obj", &curuthers) != 0)
 	{
 		throw std::runtime_error("Failed to load model");
-	}
+	}*/
 
-	WfModel crate = { 0 };
+	SceneObject* curuthers = new SceneObject(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0.0f), "models/curuthers/curuthers.obj");
+	SceneObject* crate = new SceneObject(glm::vec3(0.0f, 0.0f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0.0f), "models/crate/Crate1.obj");
+	/*WfModel crate = { 0 };
 
 	if (WfModelLoad("models/crate/Crate1.obj", &crate) != 0)
 	{
 		throw std::runtime_error("Failed to load model");
-	}
+	}*/
 
 	
 	GLint modelLoc = glGetUniformLocation(ls.getProgId(), "u_Model");
@@ -293,15 +298,16 @@ int main()
 	Movement* movement = new Movement();
 
 	int moveCheck = 0;
-	glm::mat4 model(1.0f);
+	/*glm::mat4 model(1.0f);
 	model = glm::translate(model, glm::vec3(0, 0, -20.0f));
 	model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 1, 0));
 	glm::mat4 crateModel(1.0f);
-	crateModel = glm::translate(crateModel, glm::vec3(0, 0, -10.0f));
+	crateModel = glm::translate(crateModel, glm::vec3(0, 0, -10.0f));*/
 
+	Camera* camera = new Camera();
 	// Prepare the perspective projection matrix
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)600 / (float)600, 0.1f, 100.f);
-
+	//glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)600 / (float)600, 0.1f, 100.f);
+	glm::mat4 temp(0.0f);
 	while (!quit)
 	{
 		quit = movement->GetQuit();
@@ -312,20 +318,20 @@ int main()
 		switch (moveCheck)
 		{
 		case 1:
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
+			curuthers->RotateObject(angle, glm::vec3(0, 1, 0));
 			angle = -1.0f;
 			break;
 		case 2:
-			model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
+			curuthers->RotateObject(angle, glm::vec3(0, 1, 0));
 			angle = 1.0f;
 			break;
 		case 3:
-			model += glm::translate(model, glm::vec3(0, 0, 0.5f));
-			projection += glm::translate(projection, glm::vec3(0, 0, 0.5f));
+			curuthers->TranslateObject(glm::vec3(0, 0, 0.5f));
+			camera->TranslateObject(glm::vec3(0, 0, 0.5f));
 			break;
 		case 4:
-			model += glm::translate(model, glm::vec3(0, 0, -0.5f));
-			projection += glm::translate(projection, glm::vec3(0, 0, -0.5f));
+			curuthers->TranslateObject(glm::vec3(0, 0, -0.5f));
+			camera->TranslateObject(glm::vec3(0, 0, -0.5f));
 			break;
 		default:
 			break;
@@ -340,24 +346,24 @@ int main()
 
 		glUseProgram(ls.getProgId());
 		glBindVertexArray(quad.getId());
-		glBindTexture(GL_TEXTURE_2D, curuthers.textureId);
+		glBindTexture(GL_TEXTURE_2D, curuthers->GetModelTexId());
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_BLEND);
 		glEnable(GL_DEPTH_TEST);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// Upload the model matrix
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(curuthers->GetIdentity()));
 
 		// Upload the projection matrix
-		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(camera->GetCamera()));
 
 		// Instruct OpenGL to use our shader program and our VAO
 		
-		glBindVertexArray(curuthers.vaoId);
+		glBindVertexArray(curuthers->GetModelVaoId());
 
 		// Draw 3 vertices (a triangle)
-		glDrawArrays(GL_TRIANGLES, 0, curuthers.vertexCount);
+		glDrawArrays(GL_TRIANGLES, 0, curuthers->GetModelVertexCount());
 		// Reset the state
 		glDisable(GL_BLEND);
 		glDisable(GL_CULL_FACE);
@@ -382,7 +388,7 @@ int main()
 
 		glUseProgram(ls.getProgId());
 		glBindVertexArray(quad.getId());
-		glBindTexture(GL_TEXTURE_2D, crate.textureId);
+		glBindTexture(GL_TEXTURE_2D, crate->GetModelTexId());
 		//glBindTexture(GL_TEXTURE_2D, crate.textureId);
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_BLEND);
@@ -390,19 +396,19 @@ int main()
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// Upload the model matrix
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(crateModel));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(crate->GetIdentity()));
 
 		// Upload the projection matrix
-		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(camera->GetCamera()));
 
 		// Instruct OpenGL to use our shader program and our VAO
 
-		glBindVertexArray(crate.vaoId);
+		glBindVertexArray(crate->GetModelVaoId());
 		//glBindVertexArray(crate.vaoId);
 		//glBindTexture(GL_TEXTURE_2D, curuthers.vertexCount);
 
 		// Draw 3 vertices (a triangle)
-		glDrawArrays(GL_TRIANGLES, 0, crate.vertexCount);
+		glDrawArrays(GL_TRIANGLES, 0, crate->GetModelVertexCount());
 		//glDrawArrays(GL_TRIANGLES, 1, crate.vertexCount);
 		// Reset the state
 		glDisable(GL_BLEND);
