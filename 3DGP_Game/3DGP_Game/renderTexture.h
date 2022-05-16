@@ -4,7 +4,7 @@
 struct RenderTexture
 {
 	RenderTexture(int _width, int _height);
-	RenderTexture(int _width, int _height, WfModel _model);
+	//RenderTexture(int _width, int _height, WfModel _model);
 	~RenderTexture();
 
 	void Bind();
@@ -15,5 +15,5 @@ private:
 	GLuint m_fboId;
 	GLuint m_texId;
 	GLuint m_rboId;
-	WfModel m_model;
+	//WfModel m_model;
 };

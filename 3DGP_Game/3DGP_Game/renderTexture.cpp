@@ -30,23 +30,23 @@ RenderTexture::RenderTexture(int _width, int _height)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-RenderTexture::RenderTexture(int _width, int _height, WfModel _model)
-{
-	glGenFramebuffers(1, &m_fboId);
-	if (!m_fboId)
-	{
-		throw std::exception();
-	}
-	glBindFramebuffer(GL_FRAMEBUFFER, m_fboId);
-
-	glGenRenderbuffers(1, &m_rboId);
-	glBindRenderbuffer(GL_RENDERBUFFER, m_rboId);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, _width, _height);
-	glBindRenderbuffer(GL_RENDERBUFFER, 0);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_rboId);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+//RenderTexture::RenderTexture(int _width, int _height, WfModel _model)
+//{
+//	glGenFramebuffers(1, &m_fboId);
+//	if (!m_fboId)
+//	{
+//		throw std::exception();
+//	}
+//	glBindFramebuffer(GL_FRAMEBUFFER, m_fboId);
+//
+//	glGenRenderbuffers(1, &m_rboId);
+//	glBindRenderbuffer(GL_RENDERBUFFER, m_rboId);
+//	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, _width, _height);
+//	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+//	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_rboId);
+//
+//	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//}
 
 RenderTexture::~RenderTexture()
 {

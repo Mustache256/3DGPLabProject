@@ -13,7 +13,6 @@ SceneObject::SceneObject(const char* filePath)
 	}
 }
 
-
 SceneObject::SceneObject(glm::vec3 position, glm::vec3 ort, float angle, glm::vec3 rotAxis, const char* filePath)
 {
 	m_position = position;

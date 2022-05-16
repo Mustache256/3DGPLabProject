@@ -1,7 +1,6 @@
 #pragma once
 #include "GameObject.h"
 
-#include <wavefront/wavefront.h>
 #include <iostream>
 
 class SceneObject : public GameObject

@@ -1,4 +1,6 @@
 #pragma once
+#include "Application.h"
+#include <wavefront/wavefront.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
@@ -20,8 +22,8 @@ public:
 
 protected:
 	
-	glm::vec3 m_position;
-	glm::vec3 m_orientation;
-	glm::mat4 m_identity;
+	glm::vec3 m_position = glm::vec3(0.0f);
+	glm::vec3 m_orientation = glm::vec3(0.0f);
+	glm::mat4 m_identity = glm::mat4(0.0f);
 };
 

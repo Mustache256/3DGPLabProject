@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include <stb_image.h>
-#include <wavefront/wavefront.h>
+//#include <wavefront/wavefront.h>
 
 #include <iostream>
 #include <stdexcept>
@@ -278,8 +278,10 @@ int main()
 		throw std::runtime_error("Failed to load model");
 	}*/
 
-	SceneObject* curuthers = new SceneObject(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0.0f), "models/curuthers/curuthers.obj");
-	SceneObject* crate = new SceneObject(glm::vec3(0.0f, 0.0f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0.0f), "models/crate/Crate1.obj");
+	SceneObject* curuthers = new SceneObject(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0f), 90.0f, glm::vec3(0, 1, 0), "models/curuthers/curuthers.obj");
+	
+	SceneObject* crate = new SceneObject(glm::vec3(0.0f, 0.0f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/crate/Crate1.obj");
+
 	/*WfModel crate = { 0 };
 
 	if (WfModelLoad("models/crate/Crate1.obj", &crate) != 0)
@@ -298,16 +300,10 @@ int main()
 	Movement* movement = new Movement();
 
 	int moveCheck = 0;
-	/*glm::mat4 model(1.0f);
-	model = glm::translate(model, glm::vec3(0, 0, -20.0f));
-	model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0, 1, 0));
-	glm::mat4 crateModel(1.0f);
-	crateModel = glm::translate(crateModel, glm::vec3(0, 0, -10.0f));*/
 
-	Camera* camera = new Camera();
-	// Prepare the perspective projection matrix
-	//glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)600 / (float)600, 0.1f, 100.f);
-	glm::mat4 temp(0.0f);
+	Camera* camera = new Camera(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(1, 0, 0));
+	//Camera* camera = new Camera();
+
 	while (!quit)
 	{
 		quit = movement->GetQuit();
@@ -318,20 +314,25 @@ int main()
 		switch (moveCheck)
 		{
 		case 1:
-			curuthers->RotateObject(angle, glm::vec3(0, 1, 0));
-			angle = -1.0f;
+			curuthers->TranslateObject(glm::vec3(0, 0, -0.5f));
+			camera->TranslateObject(glm::vec3(0.5f, 0, 0));
+			//curuthers->RotateObject(180.0f, glm::vec3(0, 1, 0));
+			//camera->RotateObject(angle, glm::vec3(0, 1, 0));
+			//angle = -1.0f;
 			break;
 		case 2:
-			curuthers->RotateObject(angle, glm::vec3(0, 1, 0));
-			angle = 1.0f;
+			curuthers->TranslateObject(glm::vec3(0, 0, 0.5f));
+			camera->TranslateObject(glm::vec3(-0.5f, 0, 0));
+			//curuthers->RotateObject(180.0f, glm::vec3(0, 1, 0));
+			//camera->RotateObject(angle, glm::vec3(0, 1, 0));
 			break;
 		case 3:
 			curuthers->TranslateObject(glm::vec3(0, 0, 0.5f));
-			camera->TranslateObject(glm::vec3(0, 0, 0.5f));
+			//camera->TranslateObject(glm::vec3(0, 0, 0.5f));
 			break;
 		case 4:
 			curuthers->TranslateObject(glm::vec3(0, 0, -0.5f));
-			camera->TranslateObject(glm::vec3(0, 0, -0.5f));
+			//camera->TranslateObject(glm::vec3(0, 0, -0.5f));
 			break;
 		default:
 			break;
@@ -342,7 +343,7 @@ int main()
 		//Clear red
 		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		// Make sure the current program is bound
+		//Make sure the current program is bound
 
 		glUseProgram(ls.getProgId());
 		glBindVertexArray(quad.getId());
@@ -359,7 +360,6 @@ int main()
 		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(camera->GetCamera()));
 
 		// Instruct OpenGL to use our shader program and our VAO
-		
 		glBindVertexArray(curuthers->GetModelVaoId());
 
 		// Draw 3 vertices (a triangle)
@@ -381,7 +381,6 @@ int main()
 		glBindVertexArray(quad.getId());
 		glBindTexture(GL_TEXTURE_2D, rt.GetTexture());
 		glDrawArrays(GL_TRIANGLES, 0, quad.vertCount());
-
 
 		rt.Bind();
 		// Make sure the current program is bound
@@ -422,68 +421,14 @@ int main()
 		////Clear blue
 		glClearColor(0.0f, 0.0f, 1.0f, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		// Prepare the perspective projection matrix
-		//projection = glm::perspective(glm::radians(45.0f), (float)600 / (float)600, 0.1f, 100.f);
-
-		//// Prepare the model matrix
-		//model = glm::mat4(1.0f);
-		//model = glm::translate(model, glm::vec3(0, 0, -10.5f));
-		//model = glm::rotate(model, glm::radians(angle), glm::vec3(0, 1, 0));
-
-		//// Increase the float angle so next frame the triangle rotates further
-		//angle += 1.0f;
-
-		//// Make sure the current program is bound
-
-		//glUseProgram(programId);
-		//glBindVertexArray(vaoId);
-		//glBindTexture(GL_TEXTURE_2D, rt.getTexture());
-		//glEnable(GL_CULL_FACE);
-		//glEnable(GL_BLEND);
-		//glEnable(GL_DEPTH_TEST);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		//// Upload the model matrix
-		//glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
-		//// Upload the projection matrix
-		//glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-		//// Instruct OpenGL to use our shader program and our VAO
-
-		//glBindVertexArray(curuthers.vaoId);
-		////glBindTexture(GL_TEXTURE_2D, curuthers.vertexCount);
-
-		//// Draw 3 vertices (a triangle)
-		//glDrawArrays(GL_TRIANGLES, 0, curuthers.vertexCount);
-
-		//// Reset the state
-		//glDisable(GL_BLEND);
-		//glDisable(GL_CULL_FACE);
-		//glDisable(GL_DEPTH_TEST);
-		//glBindVertexArray(0);
-		//glUseProgram(0);
-
+		
 		glUseProgram(bs.getProgId());
 		glBindVertexArray(quad.getId());
 		glBindTexture(GL_TEXTURE_2D, rt.GetTexture());
 		glDrawArrays(GL_TRIANGLES, 0, quad.vertCount());
 
-
 		//Update buffers
 		SDL_GL_SwapWindow(window);
 	}
 	return 0;
-}
-
-WfModel ModelLoad(const char* filePath)
-{
-	WfModel newModel = { 0 };
-
-	if (WfModelLoad(filePath, &newModel) != 0)
-	{
-		throw std::runtime_error("Failed to load model");
-	}
-
-	return newModel;
 }
