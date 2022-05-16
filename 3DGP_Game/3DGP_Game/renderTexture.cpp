@@ -4,6 +4,11 @@
 
 #include "renderTexture.h"
 
+RenderTexture::RenderTexture()
+{
+
+}
+
 RenderTexture::RenderTexture(int _width, int _height)
 {
 	glGenFramebuffers(1, &m_fboId);

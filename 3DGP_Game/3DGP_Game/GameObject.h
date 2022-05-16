@@ -1,5 +1,4 @@
 #pragma once
-#include "Application.h"
 #include <wavefront/wavefront.h>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>

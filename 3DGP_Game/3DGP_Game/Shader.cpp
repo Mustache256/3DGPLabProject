@@ -28,6 +28,11 @@ std::string loadFile(const std::string _path)
 }
 
 
+Shader::Shader()
+{
+
+}
+
 Shader::Shader(const std::string& _vertPath, const std::string& _fragPath)
 {
 	/////////////////////////////////////////////////////

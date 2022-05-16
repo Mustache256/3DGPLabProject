@@ -3,6 +3,7 @@
 
 struct RenderTexture
 {
+	RenderTexture();
 	RenderTexture(int _width, int _height);
 	//RenderTexture(int _width, int _height, WfModel _model);
 	~RenderTexture();

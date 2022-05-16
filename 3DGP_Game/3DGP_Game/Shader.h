@@ -4,6 +4,7 @@
 
 struct Shader
 {
+	Shader();
 	Shader(const std::string& _vertPath, const std::string& _fragPath);
 
 	GLuint getProgId();
