@@ -1,5 +1,10 @@
 #include "SceneObject.h"
 
+SceneObject::SceneObject()
+{
+
+}
+
 SceneObject::SceneObject(const char* filePath)
 {
 	m_position = glm::vec3(0.0f);

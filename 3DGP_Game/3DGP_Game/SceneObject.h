@@ -6,6 +6,7 @@
 class SceneObject : public GameObject
 {
 public:
+	SceneObject();
 	SceneObject(const char* filePath);
 	SceneObject(glm::vec3 position, glm::vec3 ort, float angle, glm::vec3 rotAxis, const char* filePath);
 	~SceneObject();

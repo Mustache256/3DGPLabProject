@@ -1,9 +1,17 @@
 #include "Application.h"
+#include "renderTexture.h"
+#include "Mesh.h"
+#include "Shader.h"
+#include "Movement.h"
+#include "GameObject.h"
+#include "Camera.h"
+#include "SceneObject.h"
+
 Application::Application()
 {
 	m_window = RenderWindow();
 
-	m_camera = new Camera();
+	m_camera = new Camera(glm::vec3(0.0f, -5.0f, -10.0f), glm::vec3(10.0f, 0.0f, 0.0f), 10.0f, glm::vec3(1, 0, 0));
 	m_movement = new Movement();
 
 	m_quad = new Mesh(0);
@@ -18,7 +26,26 @@ Application::Application()
 	m_moveCheck = 0;
 
 	CreateSceneObject(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0f), 90.0f, glm::vec3(0, 1, 0), "models/curuthers/curuthers.obj");
-	CreateSceneObject(glm::vec3(5.0f, 0.0f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/crate/Crate1.obj");
+	CreateSceneObject(glm::vec3(2.0f, 0.0f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/sphere/sphere.obj");
+	CreateSceneObject(glm::vec3(0.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+	CreateSceneObject(glm::vec3(0.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+	CreateSceneObject(glm::vec3(0.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+
+	CreateSceneObject(glm::vec3(-10.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+	CreateSceneObject(glm::vec3(-10.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+	CreateSceneObject(glm::vec3(-10.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+
+	CreateSceneObject(glm::vec3(10.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+	CreateSceneObject(glm::vec3(10.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+	CreateSceneObject(glm::vec3(10.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+
+	CreateSceneObject(glm::vec3(-20.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+	CreateSceneObject(glm::vec3(-20.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+	CreateSceneObject(glm::vec3(-20.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+
+	CreateSceneObject(glm::vec3(20.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+	CreateSceneObject(glm::vec3(20.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+	CreateSceneObject(glm::vec3(20.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
 }
 
 Application::~Application()
@@ -109,24 +136,15 @@ void Application::update()
 		{
 		case 1:
 			m_sceneObjects.at(0)->TranslateObject(glm::vec3(0, 0, -0.5f));
-			m_camera->TranslateObject(glm::vec3(0.5f, 0, 0));
-			//curuthers->RotateObject(180.0f, glm::vec3(0, 1, 0));
-			//camera->RotateObject(angle, glm::vec3(0, 1, 0));
-			//angle = -1.0f;
 			break;
 		case 2:
 			m_sceneObjects.at(0)->TranslateObject(glm::vec3(0, 0, 0.5f));
-			m_camera->TranslateObject(glm::vec3(-0.5f, 0, 0));
-			//curuthers->RotateObject(180.0f, glm::vec3(0, 1, 0));
-			//camera->RotateObject(angle, glm::vec3(0, 1, 0));
 			break;
 		case 3:
-			m_sceneObjects.at(0)->TranslateObject(glm::vec3(0, 0, 0.5f));
-			//camera->TranslateObject(glm::vec3(0, 0, 0.5f));
+			m_sceneObjects.at(0)->TranslateObject(glm::vec3(0.5f, 0, 0));
 			break;
 		case 4:
-			m_sceneObjects.at(0)->TranslateObject(glm::vec3(0, 0, -0.5f));
-			//camera->TranslateObject(glm::vec3(0, 0, -0.5f));
+			m_sceneObjects.at(0)->TranslateObject(glm::vec3(-0.5f, 0, 0));
 			break;
 		default:
 			break;

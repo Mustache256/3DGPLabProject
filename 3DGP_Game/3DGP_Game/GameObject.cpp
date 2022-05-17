@@ -1,5 +1,6 @@
 #include "GameObject.h"
 
+
 void GameObject::TranslateObject(glm::vec3 translation)
 {
 	m_identity = glm::translate(m_identity, translation);

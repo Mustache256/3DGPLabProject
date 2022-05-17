@@ -11,13 +11,13 @@
 #include <fstream>
 #include <vector>
 
-#include "renderTexture.h"
-#include "Mesh.h"
-#include "Shader.h"
-#include "Movement.h"
-#include "GameObject.h"
-#include "Camera.h"
-#include "SceneObject.h"
+class RenderTexture;
+class Mesh;
+class Shader;
+class Movement;
+class GameObject;
+class Camera;
+class SceneObject;
 
 class Application
 {

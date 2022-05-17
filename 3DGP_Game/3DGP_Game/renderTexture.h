@@ -1,8 +1,9 @@
 #pragma once
 #include <GL/glew.h>
 
-struct RenderTexture
+class RenderTexture
 {
+public:
 	RenderTexture();
 	RenderTexture(int _width, int _height);
 	//RenderTexture(int _width, int _height, WfModel _model);
