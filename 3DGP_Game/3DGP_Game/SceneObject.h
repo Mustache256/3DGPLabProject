@@ -7,8 +7,8 @@ class SceneObject : public GameObject
 {
 public:
 	SceneObject();
-	SceneObject(const char* filePath);
-	SceneObject(glm::vec3 position, glm::vec3 ort, float angle, glm::vec3 rotAxis, const char* filePath);
+	SceneObject(const char* filePath, int type);
+	SceneObject(glm::vec3 position, glm::vec3 ort, float angle, glm::vec3 rotAxis, const char* filePath, int type);
 	~SceneObject();
 
 	WfModel GetModel() { return m_model; }

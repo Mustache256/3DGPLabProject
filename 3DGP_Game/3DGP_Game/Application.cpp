@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "SceneObject.h"
+#include "Enemy.h"
 
 Application::Application()
 {
@@ -25,27 +26,27 @@ Application::Application()
 	m_quit = false;
 	m_moveCheck = 0;
 
-	CreateSceneObject(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0f), 90.0f, glm::vec3(0, 1, 0), "models/curuthers/curuthers.obj");
-	CreateSceneObject(glm::vec3(2.0f, 0.0f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/sphere/sphere.obj");
-	CreateSceneObject(glm::vec3(0.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
-	CreateSceneObject(glm::vec3(0.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
-	CreateSceneObject(glm::vec3(0.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+	CreateSceneObject(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0f), 90.0f, glm::vec3(0, 1, 0), "models/curuthers/curuthers.obj", 1);
+	CreateSceneObject(glm::vec3(2.0f, 0.0f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/sphere/sphere.obj", 2);
+	CreateSceneObject(glm::vec3(0.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
+	CreateSceneObject(glm::vec3(0.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
+	CreateSceneObject(glm::vec3(0.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
 
-	CreateSceneObject(glm::vec3(-10.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
-	CreateSceneObject(glm::vec3(-10.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
-	CreateSceneObject(glm::vec3(-10.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+	CreateSceneObject(glm::vec3(-10.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
+	CreateSceneObject(glm::vec3(-10.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
+	CreateSceneObject(glm::vec3(-10.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
 
-	CreateSceneObject(glm::vec3(10.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
-	CreateSceneObject(glm::vec3(10.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
-	CreateSceneObject(glm::vec3(10.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+	CreateSceneObject(glm::vec3(10.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
+	CreateSceneObject(glm::vec3(10.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
+	CreateSceneObject(glm::vec3(10.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
 
-	CreateSceneObject(glm::vec3(-20.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
-	CreateSceneObject(glm::vec3(-20.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
-	CreateSceneObject(glm::vec3(-20.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+	CreateSceneObject(glm::vec3(-20.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
+	CreateSceneObject(glm::vec3(-20.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
+	CreateSceneObject(glm::vec3(-20.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
 
-	CreateSceneObject(glm::vec3(20.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
-	CreateSceneObject(glm::vec3(20.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
-	CreateSceneObject(glm::vec3(20.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj");
+	CreateSceneObject(glm::vec3(20.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
+	CreateSceneObject(glm::vec3(20.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
+	CreateSceneObject(glm::vec3(20.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
 }
 
 Application::~Application()
@@ -70,9 +71,13 @@ SDL_Window* Application::RenderWindow()
 	return window;
 }
 
-void Application::CreateSceneObject(glm::vec3 pos, glm::vec3 ort, float angle, glm::vec3 rotAxis, const char* filePath)
+void Application::CreateSceneObject(glm::vec3 pos, glm::vec3 ort, float angle, glm::vec3 rotAxis, const char* filePath, int type)
 {
-	SceneObject* newObj = new SceneObject(pos, ort, angle, rotAxis, filePath);
+	SceneObject* newObj = new SceneObject(pos, ort, angle, rotAxis, filePath, type);
+	if (type == 2)
+	{
+		
+	}
 	m_sceneObjects.push_back(newObj);
 }
 

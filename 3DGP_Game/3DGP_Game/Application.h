@@ -18,6 +18,7 @@ class Movement;
 class GameObject;
 class Camera;
 class SceneObject;
+class Enemy;
 
 class Application
 {
@@ -27,7 +28,7 @@ public:
 	~Application();
 	void update();
 	SDL_Window* RenderWindow();
-	void CreateSceneObject(glm::vec3 pos, glm::vec3 ort, float angle, glm::vec3 rotAxis, const char* filePath);
+	void CreateSceneObject(glm::vec3 pos, glm::vec3 ort, float angle, glm::vec3 rotAxis, const char* filePath, int type);
 	void Render(int i);
 
 private:
@@ -35,6 +36,7 @@ private:
 	SDL_Window* m_window;
 
 	std::vector<SceneObject*> m_sceneObjects;
+
 	Camera* m_camera;
 	Movement* m_movement;
 

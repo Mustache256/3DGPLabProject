@@ -5,7 +5,7 @@ SceneObject::SceneObject()
 
 }
 
-SceneObject::SceneObject(const char* filePath)
+SceneObject::SceneObject(const char* filePath, int type)
 {
 	m_position = glm::vec3(0.0f);
 	m_orientation = glm::vec3(0.0f);
@@ -16,9 +16,11 @@ SceneObject::SceneObject(const char* filePath)
 	{
 		throw std::runtime_error("Failed to load model");
 	}
+
+	m_type = type;
 }
 
-SceneObject::SceneObject(glm::vec3 position, glm::vec3 ort, float angle, glm::vec3 rotAxis, const char* filePath)
+SceneObject::SceneObject(glm::vec3 position, glm::vec3 ort, float angle, glm::vec3 rotAxis, const char* filePath, int type)
 {
 	m_position = position;
 	m_orientation = ort;
@@ -32,6 +34,8 @@ SceneObject::SceneObject(glm::vec3 position, glm::vec3 ort, float angle, glm::ve
 
 	m_identity = glm::translate(m_identity, position);
 	m_identity = glm::rotate(m_identity, glm::radians(angle), rotAxis);
+
+	m_type = type;
 }
 
 SceneObject::~SceneObject()

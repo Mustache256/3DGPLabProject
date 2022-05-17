@@ -1,6 +1,10 @@
 ﻿  Application.cpp
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\Application.cpp(79,3): error C2065:  'm_enemies': undeclared identifier
+  Camera.cpp
+  Enemy.cpp
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\Application.cpp(165,21): warning C4018:  '<': signed/unsigned mismatch
+  GameObject.cpp
+  SceneObject.cpp
   main.cpp
-  renderTexture.cpp
   Generating Code...
-\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\Application.cpp(157,21): warning C4018:  '<': signed/unsigned mismatch
-  3DGP_Game.vcxproj -> \\bournemouth.ac.uk\data\student\home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\Debug\3DGP_Game.exe
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\Enemy.cpp(26,20): warning C4018:  '<': signed/unsigned mismatch
