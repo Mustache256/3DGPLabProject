@@ -12,7 +12,7 @@ Application::Application()
 {
 	m_window = RenderWindow();
 
-	m_camera = new Camera(glm::vec3(0.0f, -5.0f, -10.0f), glm::vec3(10.0f, 0.0f, 0.0f), 10.0f, glm::vec3(1, 0, 0));
+	m_camera = new Camera(glm::vec3(0.0f, -10.0f, -7.0f), glm::vec3(40.0f, 0.0f, 0.0f), 40.0f, glm::vec3(1, 0, 0));
 	m_movement = new Movement();
 
 	m_quad = new Mesh(0);
@@ -26,27 +26,28 @@ Application::Application()
 	m_quit = false;
 	m_moveCheck = 0;
 
-	CreateSceneObject(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0f), 90.0f, glm::vec3(0, 1, 0), "models/curuthers/curuthers.obj", 1);
-	CreateSceneObject(glm::vec3(2.0f, 0.0f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/sphere/sphere.obj", 2);
-	CreateSceneObject(glm::vec3(0.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
-	CreateSceneObject(glm::vec3(0.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
-	CreateSceneObject(glm::vec3(0.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
+	m_randGen = false;
 
-	CreateSceneObject(glm::vec3(-10.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
-	CreateSceneObject(glm::vec3(-10.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
-	CreateSceneObject(glm::vec3(-10.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
+	CreateSceneObject(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0f), glm::vec3(1.0f), 90.0f, glm::vec3(0, 1, 0), "models/curuthers/curuthers.obj", GameObject::ObjectType::Player);
 
-	CreateSceneObject(glm::vec3(10.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
-	CreateSceneObject(glm::vec3(10.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
-	CreateSceneObject(glm::vec3(10.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
+	for (float i = -20.0f; i < 20.0f; i += 10.0f)
+	{
+		CreateSceneObject(glm::vec3(i, -2.5f, -20.0f), glm::vec3(0.0f), glm::vec3(2.0f, 1.0f, 1.0f), 90.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", GameObject::ObjectType::Floor);
+	}
 
-	CreateSceneObject(glm::vec3(-20.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
-	CreateSceneObject(glm::vec3(-20.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
-	CreateSceneObject(glm::vec3(-20.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
+	CreateSceneObject(glm::vec3(20.0f, 1.0f, -24.0f), glm::vec3(0.0f), glm::vec3(1.0f), 90.0f, glm::vec3(0, 1, 0), "models/sphere/sphere.obj", GameObject::ObjectType::Enemy);
+	CreateSceneObject(glm::vec3(25.0f, 1.0f, -20.0f), glm::vec3(0.0f), glm::vec3(1.0f), 90.0f, glm::vec3(0, 1, 0), "models/sphere/sphere.obj", GameObject::ObjectType::Enemy);
+	CreateSceneObject(glm::vec3(30.0f, 1.0f, -16.0f), glm::vec3(0.0f), glm::vec3(1.0f), 90.0f, glm::vec3(0, 1, 0), "models/sphere/sphere.obj", GameObject::ObjectType::Enemy);
+	CreateSceneObject(glm::vec3(35.0f, 1.0f, -24.0f), glm::vec3(0.0f), glm::vec3(1.0f), 90.0f, glm::vec3(0, 1, 0), "models/sphere/sphere.obj", GameObject::ObjectType::Enemy);
+	CreateSceneObject(glm::vec3(40.0f, 1.0f, -20.0f), glm::vec3(0.0f), glm::vec3(1.0f), 90.0f, glm::vec3(0, 1, 0), "models/sphere/sphere.obj", GameObject::ObjectType::Enemy);
+	CreateSceneObject(glm::vec3(45.0f, 1.0f, -16.0f), glm::vec3(0.0f), glm::vec3(1.0f), 90.0f, glm::vec3(0, 1, 0), "models/sphere/sphere.obj", GameObject::ObjectType::Enemy);
 
-	CreateSceneObject(glm::vec3(20.0f, -2.5f, -10.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
-	CreateSceneObject(glm::vec3(20.0f, -2.5f, -20.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
-	CreateSceneObject(glm::vec3(20.0f, -2.5f, -30.0f), glm::vec3(0.0f), 0.0f, glm::vec3(0, 1, 0), "models/woodfloor/woodfloor.obj", 0);
+	m_sceneObjects.at(5)->SetPosition(glm::vec3(4.0f, 1.0f, -24.0f));
+	m_sceneObjects.at(6)->SetPosition(glm::vec3(0.0f, 1.0f, -24.0f));
+	m_sceneObjects.at(7)->SetPosition(glm::vec3(-4.0f, 1.0f, -24.0f));
+	m_sceneObjects.at(8)->SetPosition(glm::vec3(4.0f, 1.0f, -24.0f));
+	m_sceneObjects.at(9)->SetPosition(glm::vec3(0.0f, 1.0f, -24.0f));
+	m_sceneObjects.at(10)->SetPosition(glm::vec3(-4.0f, 1.0f, -24.0f));
 }
 
 Application::~Application()
@@ -71,13 +72,9 @@ SDL_Window* Application::RenderWindow()
 	return window;
 }
 
-void Application::CreateSceneObject(glm::vec3 pos, glm::vec3 ort, float angle, glm::vec3 rotAxis, const char* filePath, int type)
+void Application::CreateSceneObject(glm::vec3 pos, glm::vec3 ort, glm::vec3 scale, float angle, glm::vec3 rotAxis, const char* filePath, GameObject::ObjectType type)
 {
-	SceneObject* newObj = new SceneObject(pos, ort, angle, rotAxis, filePath, type);
-	if (type == 2)
-	{
-		
-	}
+	SceneObject* newObj = new SceneObject(pos, ort, scale, angle, rotAxis, filePath, type);
 	m_sceneObjects.push_back(newObj);
 }
 
@@ -90,7 +87,7 @@ void Application::Render(int i)
 	if (i < 1)
 	{
 		//Clear red
-		glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		//Make sure the current program is bound
 	}
@@ -137,24 +134,82 @@ void Application::update()
 		m_quit = m_movement->GetQuit();
 		m_moveCheck = m_movement->Move();
 
-		switch (m_moveCheck)
+		if (!m_randGen)
 		{
-		case 1:
-			m_sceneObjects.at(0)->TranslateObject(glm::vec3(0, 0, -0.5f));
-			break;
-		case 2:
-			m_sceneObjects.at(0)->TranslateObject(glm::vec3(0, 0, 0.5f));
-			break;
-		case 3:
-			m_sceneObjects.at(0)->TranslateObject(glm::vec3(0.5f, 0, 0));
-			break;
-		case 4:
-			m_sceneObjects.at(0)->TranslateObject(glm::vec3(-0.5f, 0, 0));
-			break;
-		default:
-			break;
+			m_randGen = true;
+			srand(time(NULL));
 		}
 
+		for (size_t i = 0; i < m_sceneObjects.size(); i++)
+		{
+			switch (m_sceneObjects.at(i)->GetType())
+			{
+				case GameObject::ObjectType::Player:
+				{
+					switch (m_moveCheck)
+					{
+					case 1:
+					{
+						if (m_sceneObjects.at(i)->GetPosition().z > -27.0f) { m_sceneObjects.at(0)->TranslateObject(glm::vec3(0, 0, -0.3f)); }
+					}
+						break;
+					case 2:
+					{
+						if (m_sceneObjects.at(i)->GetPosition().z < -12.0f) { m_sceneObjects.at(0)->TranslateObject(glm::vec3(0, 0, 0.3f)); }
+					}
+						break;
+					case 3:
+					{
+						if (m_sceneObjects.at(i)->GetPosition().x < 8.0f) { m_sceneObjects.at(0)->TranslateObject(glm::vec3(0.3f, 0, 0)); }
+					}
+						break;
+					case 4:
+					{
+						if (m_sceneObjects.at(i)->GetPosition().x > -9.0f) { m_sceneObjects.at(0)->TranslateObject(glm::vec3(-0.3f, 0, 0)); }
+					}
+						break;
+					default:
+						break;
+					}
+				}
+				break;
+				case GameObject::ObjectType::Floor:
+				{
+					m_sceneObjects.at(i)->TranslateObject(glm::vec3(0, 0, -0.1f));
+					for (size_t i = 0; i < 4; i++)
+					{
+						if (m_sceneObjects.at(i + 1)->GetPosition().z < -20.0f - (i * 10))
+						{
+							m_sceneObjects.at(i + 1)->TranslateObject(glm::vec3(0, 0, 40.0f));
+						}
+					}
+				}
+				break;
+				case GameObject::ObjectType::Enemy:
+				{
+					m_sceneObjects.at(i)->TranslateObject(glm::vec3(0, 0, -0.1f));
+					for (size_t i = 0; i < 6; i++)
+					{
+						if (m_sceneObjects.at(i + 5)->GetPosition().z < -70.0f - (i * 5))
+						{
+							m_sceneObjects.at(i + 5)->TranslateObject(glm::vec3(0, 0, 50.0f * (rand() % 2 + 1)));
+						}
+
+						if ((m_sceneObjects.at(0)->GetPosition().z - (23.5f + i + 5.0f)) < (m_sceneObjects.at(i + 5)->GetPosition().z + 1.5f) && (m_sceneObjects.at(0)->GetPosition().z - (23.5f + i + 5.0f)) > (m_sceneObjects.at(i + 5)->GetPosition().z - 1.5f))
+						{
+							if ((m_sceneObjects.at(0)->GetPosition().x < (m_sceneObjects.at(i + 5)->GetPosition().z + 2.0f) && (m_sceneObjects.at(0)->GetPosition().z > (m_sceneObjects.at(i + 5)->GetPosition().z - 2.0f))))
+							{
+								std::cout << "Collided with sphere " << i + 5 << std::endl;
+							}
+						}
+					}
+				}
+				break;
+			}
+		}
+		
+
+		
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_BLEND);
 		glEnable(GL_DEPTH_TEST);

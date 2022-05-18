@@ -5,7 +5,7 @@ SceneObject::SceneObject()
 
 }
 
-SceneObject::SceneObject(const char* filePath, int type)
+SceneObject::SceneObject(const char* filePath, ObjectType type)
 {
 	m_position = glm::vec3(0.0f);
 	m_orientation = glm::vec3(0.0f);
@@ -20,7 +20,7 @@ SceneObject::SceneObject(const char* filePath, int type)
 	m_type = type;
 }
 
-SceneObject::SceneObject(glm::vec3 position, glm::vec3 ort, float angle, glm::vec3 rotAxis, const char* filePath, int type)
+SceneObject::SceneObject(glm::vec3 position, glm::vec3 ort, glm::vec3 scale, float angle, glm::vec3 rotAxis, const char* filePath, ObjectType type)
 {
 	m_position = position;
 	m_orientation = ort;
@@ -34,6 +34,7 @@ SceneObject::SceneObject(glm::vec3 position, glm::vec3 ort, float angle, glm::ve
 
 	m_identity = glm::translate(m_identity, position);
 	m_identity = glm::rotate(m_identity, glm::radians(angle), rotAxis);
+	m_identity = glm::scale(m_identity, scale);
 
 	m_type = type;
 }

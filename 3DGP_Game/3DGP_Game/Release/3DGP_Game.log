@@ -1,9 +1,4 @@
-﻿  main.cpp
-  Mesh.cpp
-  renderTexture.cpp
-  Shader.cpp
-  Generating code
-  Previous IPDB not found, fall back to full compilation.
-  All 278 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  Finished generating code
-  3DGP_Game.vcxproj -> \\bournemouth.ac.uk\data\student\home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\Release\3DGP_Game.exe
+﻿  Application.cpp
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\Application.cpp(169,21): warning C4018:  '<': signed/unsigned mismatch
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\Application.cpp(181,1): error C2471:  cannot update program database '\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\Release\vc142.pdb'
+\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\Application.cpp(181,1): error C2471: FileTracker : error FTK1006: could not write entry to the file tracking log file: \\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\Release\3DGP_Game.tlog\CL.read.1.tlog. There is not enough space on the disk.

@@ -9,6 +9,8 @@ class GameObject abstract
 {
 public:
 
+	enum class ObjectType { Player, Enemy, Floor, Other };
+
 	virtual void SetPosition(glm::vec3 pos) { m_position = pos; }
 	virtual glm::vec3 GetPosition() { return m_position; }
 
@@ -18,8 +20,8 @@ public:
 	virtual void SetIdentity(glm::mat4 identity) { m_identity = identity; }
 	virtual glm::mat4 GetIdentity() { return m_identity; }
 
-	virtual void SetType(int type) { m_type = type; }
-	virtual int GetType() { return m_type; }
+	virtual void SetType(ObjectType type) { m_type = type; }
+	virtual ObjectType GetType() { return m_type; }
 
 	virtual void TranslateObject(glm::vec3 translation);
 	virtual void RotateObject(float angle, glm::vec3 rotAxis);
@@ -29,6 +31,6 @@ protected:
 	glm::vec3 m_position = glm::vec3(0.0f);
 	glm::vec3 m_orientation = glm::vec3(0.0f);
 	glm::mat4 m_identity = glm::mat4(0.0f);
-	int m_type;
+	ObjectType m_type;
 };
 
