@@ -26,33 +26,50 @@ class Enemy;
 class Application
 {
 public:
-
+	//Application construtor and destructor definitions
 	Application();
 	~Application();
+
+	//Main game update function definition
 	void update();
+	//Function definition for the function that creates a new SDL window
 	SDL_Window* RenderWindow();
+	//Function definition for the function that creates a new Game Object
 	void CreateSceneObject(glm::vec3 pos, glm::vec3 ort, glm::vec3 scale, float angle, glm::vec3 rotAxis, const char* filePath, GameObject::ObjectType type);
+	//Function definition for the function that handles object rendering
 	void Render(int i);
 
 private:
-
+	//SDL window object 
 	SDL_Window* m_window;
 
-	std::vector<SceneObject*> m_sceneObjects;
+	//Vector that stores all game objects 
+	std::vector<SceneObject*> m_objects;
 
-	Camera* m_camera;
-	Movement* m_movement;
+	//Main camera object 
+	Camera* m_mainCamera;
+	//Movement manager object 
+	Movement* m_objMovement;
 
-	Mesh* m_quad;
+	//Quad mesh object
+	Mesh* m_quadMesh;
+	//Lighting shader object 
 	Shader* m_lightShader;
+	//Basic shader object
 	Shader* m_basicShader;
+	//Render texture object
 	RenderTexture* m_renderTexture;
 
+	//Model location storage variable
 	GLint m_modelLoc;
+	//Projection location storage variable
 	GLint m_projectionLoc;
 
-	bool m_quit;
-	bool m_randGen;
-	int m_moveCheck;
+	//Quit check variable
+	bool m_quitCheck;
+	//Random seed manager variable
+	bool m_randomGen;
+	//Movement check storage variable
+	int m_movementCheck;
 };
 

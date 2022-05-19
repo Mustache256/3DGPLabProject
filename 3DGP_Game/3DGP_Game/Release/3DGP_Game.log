@@ -1,4 +1,7 @@
-﻿  Application.cpp
-\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\Application.cpp(169,21): warning C4018:  '<': signed/unsigned mismatch
-\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\Application.cpp(181,1): error C2471:  cannot update program database '\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\Release\vc142.pdb'
-\\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\Application.cpp(181,1): error C2471: FileTracker : error FTK1006: could not write entry to the file tracking log file: \\bournemouth.ac.uk\data\Student\Home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\3DGP_Game\Release\3DGP_Game.tlog\CL.read.1.tlog. There is not enough space on the disk.
+﻿  renderTexture.cpp
+  Generating code
+  8 of 346 functions ( 2.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  3DGP_Game.vcxproj -> \\bournemouth.ac.uk\data\student\home\SciTech\s5304084\GitHub\3DGPLabProject\3DGP_Game\Release\3DGP_Game.exe

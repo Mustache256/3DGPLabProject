@@ -9,28 +9,37 @@ class GameObject abstract
 {
 public:
 
+	//Enum class for setting an objects type
 	enum class ObjectType { Player, Enemy, Floor, Other };
 
-	virtual void SetPosition(glm::vec3 pos) { m_position = pos; }
-	virtual glm::vec3 GetPosition() { return m_position; }
+	//Setter and getter for object position
+	virtual void SetPosition(glm::vec3 pos) { m_objPos = pos; }
+	virtual glm::vec3 GetPosition() { return m_objPos; }
 
-	virtual void SetOrientation(glm::vec3 ort) { m_orientation = ort; }
-	virtual glm::vec3 GetOrientation() { return m_orientation; }
+	//Setter and getter for object orientation
+	virtual void SetOrientation(glm::vec3 ort) { m_objOrt = ort; }
+	virtual glm::vec3 GetOrientation() { return m_objOrt; }
 
-	virtual void SetIdentity(glm::mat4 identity) { m_identity = identity; }
-	virtual glm::mat4 GetIdentity() { return m_identity; }
+	//Setter and getter for object matrix
+	virtual void SetIdentity(glm::mat4 identity) { m_identityMat = identity; }
+	virtual glm::mat4 GetIdentity() { return m_identityMat; }
 
-	virtual void SetType(ObjectType type) { m_type = type; }
-	virtual ObjectType GetType() { return m_type; }
+	//Setter and getter for object type
+	virtual void SetType(ObjectType type) { m_objType = type; }
+	virtual ObjectType GetType() { return m_objType; }
 
+	//Function that handle object translation and rotation
 	virtual void TranslateObject(glm::vec3 translation);
 	virtual void RotateObject(float angle, glm::vec3 rotAxis);
 
 protected:
 	
-	glm::vec3 m_position = glm::vec3(0.0f);
-	glm::vec3 m_orientation = glm::vec3(0.0f);
-	glm::mat4 m_identity = glm::mat4(0.0f);
-	ObjectType m_type;
+	//object position and orientation storage vectors
+	glm::vec3 m_objPos = glm::vec3(0.0f);
+	glm::vec3 m_objOrt = glm::vec3(0.0f);
+	//Object mtrix storage variable
+	glm::mat4 m_identityMat = glm::mat4(0.0f);
+	//Object type storage variable
+	ObjectType m_objType;
 };
 
